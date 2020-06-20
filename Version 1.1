@@ -8,27 +8,31 @@ max = 6
 pygame.init()
 pygame.quit()
 
-# Tracks score, number of dice, and turn number to determine winner.
-my_score = 0
-opp_score = 0
+# Tracks players, score, number of dice, and turn number to determine winner.
+class Player(object):
+	def __init__(self, current_hand, rounds_won):
+		self.score = 0
+		self.current_hand = current_hand
+		self.rounds_won = rounds_won
+
 num_dice = 5
 turn = 0
 roll = "y"
-
-# Tracks rolls for current turn.
-my_roll = []
-opp_roll = []
-
-# Initiates play by returning "yes".
+current_hand = []
+player1 = Player(current_hand, 0)
+player2 = Player(current_hand, 0)
 
 # Rolls the dice for the player and opponent.
 while turn < 2 and roll.lower() == "y":
+	player1.current_hand = []
 	roll = input("Would you like to roll the dice? y/n: ")
 	for i in range(num_dice):
-		i = my_roll.append(random.randint(1, 6))
-		i = opp_roll.append(random.randint(1, 6))
+		i = player1.current_hand.append(random.randint(1, 6))
+	if player2.current_hand == []: # Will need to update to roll if the opponent has a poor hand.
+		for i in range(num_dice):
+			i = player2.current_hand.append(random.randint(1, 6))
 	turn = turn + 1
-	print("You rolled: ", my_roll)
-	print("Your opponent rolled: ", opp_roll)
+	print("You rolled: ", player1.current_hand)
+	print("Your opponent has: ", player2.current_hand)
 else:
 	print("The winner is ")
