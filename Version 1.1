@@ -1,0 +1,34 @@
+import pygame
+import random
+
+min = 1
+max = 6
+
+# pygame setup to provide GUI
+pygame.init()
+pygame.quit()
+
+# Tracks score, number of dice, and turn number to determine winner.
+my_score = 0
+opp_score = 0
+num_dice = 5
+turn = 0
+roll = "y"
+
+# Tracks rolls for current turn.
+my_roll = []
+opp_roll = []
+
+# Initiates play by returning "yes".
+
+# Rolls the dice for the player and opponent.
+while turn < 2 and roll.lower() == "y":
+	roll = input("Would you like to roll the dice? y/n: ")
+	for i in range(num_dice):
+		i = my_roll.append(random.randint(1, 6))
+		i = opp_roll.append(random.randint(1, 6))
+	turn = turn + 1
+	print("You rolled: ", my_roll)
+	print("Your opponent rolled: ", opp_roll)
+else:
+	print("The winner is ")
