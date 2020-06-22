@@ -1,139 +1,43 @@
-import pygame
-import random
+from collections import Counter
 
-min = 1
-max = 6
+current_hand = [6, 2, 3, 5, 4]
+print(current_hand)
 
-# pygame setup to provide GUI
-pygame.init()
-pygame.quit()
+current_hand = sorted(current_hand)
+print(current_hand)
 
-# Tracks players, score, number of dice, and turn number to determine winner.
-class Player(object):
-	def __init__(self, current_hand, rounds_won):
-		self.score = 0
-		self.current_hand = current_hand
-		self.rounds_won = rounds_won
+current_hand = Counter(current_hand)
+print(current_hand)
 
-num_dice = 5
-turn = 0
-roll = "y"
-current_hand = []
-player1 = Player(current_hand, 0)
-player2 = Player(current_hand, 0)
+def scoring():
+    score = 0
+    for key in current_hand:
+        if key == 6:
+            score = score + (key * current_hand[key])
+        elif key == 5:
+            score = score + (key * current_hand[key])
+        elif key == 4:
+            score = score + (key * current_hand[key])
+        elif key == 3:
+            score = score + (key * current_hand[key])
+        elif key == 2:
+            score = score + (key * current_hand[key])
+        elif key == 1:
+            score = score + (key * current_hand[key])
+    if 4 in current_hand.values(): # Four of a Kind
+        score = score + 2560
+    elif 3 in current_hand.values() and 2 in current_hand.values(): # Full House (still need to account for higher hand if both players have a Full House.
+        score = score + 1280
+    elif (1 in current_hand and 2 in current_hand and 3 in current_hand and 4 in current_hand and 5 in current_hand) \
+            or (2 in current_hand and 3 in current_hand and 4 in current_hand and 5 in current_hand and 6 in current_hand):
+            score = score + 640
+    elif 3 in current_hand.values(): # Three of a Kind
+        score = score + 320
+    elif 2 in current_hand.values(): # Pair or Two Pair
+        for value in current_hand.values():
+            if value == 2:
+                score = score + 80
 
-# Establishes the scoring according to poker hand hierarchy.
-class current_hand(object):
-	dice = []
-	values = []
+    print(score)
 
-	def setValues(self):
-		for die in self.dice:
-			self.values.append(die.value)
-		self.values.sort()
-
-		print(len(self.values))
-
-	def isFourOfAKind(self):
-		dieOneCount = self.values.count(self.values[0])
-		dieTwoCount = self.values.count(self.values[len(self.values) - 1])
-
-		if dieOneCount == 4 | dieTwoCount == 4:
-			return True
-		else:
-			return False
-
-	def isThreeOfAKind(self):
-		dieOneCount = self.values.count(self.values[0])
-		dieTwoCount = self.values.count(self.values[len(self.values) - 1])
-
-		if dieOneCount == 3 | dieTwoCount == 3:
-			return True
-		else:
-			return False
-
-	def isStraight(self):
-		low = min(self.values)
-
-		if low == 10 and (low + 1 in self.values) and (low + 2 in self.values) and (low + 3 in self.values) and (
-				low + 4 in self.values):
-			return True;
-
-	def isFullHouse(self):
-		self.values = []
-		for die in self.dice:
-			self.values.append(die.value)
-
-		self.values.sort()
-		dieOneCount = self.values.count(self.values[0])
-		dieTwoCount = self.values.count(self.values[len(self.values) - 1])
-
-		if (dieOneCount == 2 and dieTwoCount == 3) | (dieOneCount == 3 and dieTwoCount == 2):
-			return True
-		else:
-			return False
-
-	def isTwoPair(self):
-		dieOneCount = self.values.count(self.values[0])
-		dieTwoCount = self.values.count(self.values[4])
-		dieThreeCount = self.values.count(self.values[2])
-
-		if (dieOneCount == 2 and dieTwoCount == 2) | (dieOneCount == 2 and dieThreeCount == 2) | (
-				dieTwoCount == 2 and dieThreeCount == 2):
-			return True;
-		return False;
-
-	def isPair(self):
-		dieOneCount = self.values.count(self.values[0])
-		dieTwoCount = self.values.count(self.values[4])
-		dieThreeCount = self.values.count(self.values[2]) #Keep an eye on this...
-
-		if (dieOneCount == 2 ^ dieTwoCount == 2 ^ dieTwoCount == 3):
-			return True;
-		return False;
-
-	def __init__(self, dice):
-		for d in dice:
-			self.dice.append(die(d))
-
-		self.setValues()
-
-	def getScore(self):
-		score = 0
-		if self.isFourOfAKind():
-			score = 120000
-		elif self.isFullHouse():
-			score = 110000
-		elif self.isStraight():
-			score = 90000
-		elif self.isThreeOfAKind():
-			score = 80000
-		elif self.isTwoPair():
-			score = 70000
-		elif self.isPair():
-			score = 60000
-		else:
-			score = 0
-
-		return score
-
-
-# Rolls the dice for the player and opponent.
-while turn < 2 and roll.lower() == "y":
-	player1.current_hand = []
-	roll = input("Would you like to roll the dice? y/n: ")
-	for i in range(num_dice):
-		i = player1.current_hand.append(random.randint(1, 6))
-	if player2.current_hand == []: # Will need to update to roll if the opponent has a poor hand.
-		for i in range(num_dice):
-			i = player2.current_hand.append(random.randint(1, 6))
-	turn = turn + 1
-	print("You rolled: ", player1.current_hand)
-	print("Your opponent has: ", player2.current_hand)
-else:
-	if current_hand.getScore(player1) >= current_hand.getScore(player2):
-		print("You Win!")
-	elif current_hand.getScore(player1) == current_hand.getScore(player2):
-		print("It's a tie")
-	else:
-		print("You Lose!")
+scoring()
