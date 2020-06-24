@@ -3,7 +3,7 @@ import random
 
 num_dice = 5
 turn = 0
-round = 0
+round = 1
 min = 1
 max = 6
 roll = "y"
@@ -16,7 +16,7 @@ opp_score = 0
 my_rounds = 0
 opp_rounds = 0
 
-while turn < 2 and roll.lower() == "y":
+while turn < 2 and my_rounds < 2 and opp_rounds < 2 and roll.lower() == "y":
     current_hand = []
     for i in range(num_dice):
         i = current_hand.append(random.randint(min, max))
@@ -121,12 +121,6 @@ def opp_scoring():
                 score = score + 80
     return score
 
-def roll_again():
-    if input("Would you like to reroll some dice? y/n ") == "y":
-        again()
-    else:
-        print("Good Luck!")
-
 my_score = my_scoring()
 print(my_score)
 opp_score = opp_scoring()
@@ -135,7 +129,7 @@ print(opp_score)
 def winner():
     if my_score > opp_score:
         global my_rounds
-        print("You Win!")
+        print("You win!")
         my_rounds = my_rounds + 1
         global round
         round = round + 1
@@ -143,10 +137,47 @@ def winner():
         print("It's a tie.  Starting next round.")
     else:
         global opp_rounds
-        print("You Lose!")
+        print("You lose!")
         opp_rounds = opp_rounds + 1
         round = round + 1
     print("The score is " + str(my_rounds) + " to ", str(opp_rounds))
 
 winner()
-print(round)
+print("Round number: ", round)
+
+turn = 0
+current_hand = []
+opponent_hand = []
+roll = "y"
+
+while turn < 2 and my_rounds < 2 and opp_rounds < 2 and roll.lower() == "y":
+    current_hand = []
+    for i in range(num_dice):
+        i = current_hand.append(random.randint(min, max))
+        current_hand.sort()
+    turn = turn + 1
+    roll = ""
+    print("You rolled: ", current_hand)
+
+if turn < 2 and opp_score <= my_score:
+    opponent_hand = []
+    for i in range(num_dice):
+        i = opponent_hand.append(random.randint(min, max))
+        opponent_hand.sort()
+    print('Your opponent rolled: ', opponent_hand)
+
+z = current_hand
+again(z)
+
+print("You rolled: ", current_hand)
+
+current_hand = Counter(current_hand)
+opponent_hand = Counter(opponent_hand)
+
+my_score = my_scoring()
+print(my_score)
+opp_score = opp_scoring()
+print(opp_score)
+
+winner()
+print("Round number: ", round)
