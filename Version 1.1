@@ -1,8 +1,10 @@
 from collections import Counter
 import random
+import sys
 
 num_dice = 5
-turn = 0
+turn = 1
+opp_turn = 1
 round = 1
 min = 1
 max = 6
@@ -25,7 +27,7 @@ while turn < 2 and my_rounds < 2 and opp_rounds < 2 and roll.lower() == "y":
     roll = ""
     print("You rolled: ", current_hand)
 
-if turn < 2 and opp_score <= my_score:
+if opp_turn < 2 and opp_score <= my_score:
     opponent_hand = []
     for i in range(num_dice):
         i = opponent_hand.append(random.randint(min, max))
@@ -54,6 +56,13 @@ def again(z):
 z = current_hand
 again(z)
 
+if opp_turn < 2 and opp_score <= my_score:
+    opponent_hand = []
+    for i in range(num_dice):
+        i = opponent_hand.append(random.randint(min, max))
+        opponent_hand.sort()
+    print('Your opponent rolled: ', opponent_hand)
+
 print("You rolled: ", current_hand)
 
 current_hand = Counter(current_hand)
@@ -76,7 +85,7 @@ def my_scoring():
             score = score + (key * current_hand[key])
     if 4 in current_hand.values(): # Four of a Kind
         score = score + 2560
-    elif 3 in current_hand.values() and 2 in current_hand.values(): # Full House (still need to account for higher hand if both players have a Full House.
+    elif 3 in current_hand.values() and 2 in current_hand.values(): # Full House
         score = score + 1280
     elif (1 in current_hand and 2 in current_hand and 3 in current_hand and 4 in current_hand and 5 in current_hand) \
             or (2 in current_hand and 3 in current_hand and 4 in current_hand and 5 in current_hand and 6 in current_hand):
@@ -109,7 +118,13 @@ def opp_scoring():
     if 4 in opponent_hand.values(): # Four of a Kind
         score = score + 2560
     elif 3 in opponent_hand.values() and 2 in opponent_hand.values(): # Full House (still need to account for higher hand if both players have a Full House.
-        score = score + 1280
+        if 3 in opponent_hand.values() > 3 in current_hand.values():
+            score = score + 1360
+        elif 3 in opponent_hand.values() == 3 in current_hand.values():
+            if 2 in opponent_hand.values() > 2 in current_hand.values():
+                score = score + 1360
+        else:
+            score = 1200
     elif (1 in opponent_hand and 2 in opponent_hand and 3 in opponent_hand and 4 in opponent_hand and 5 in opponent_hand) \
             or (2 in opponent_hand and 3 in opponent_hand and 4 in opponent_hand and 5 in opponent_hand and 6 in opponent_hand):
             score = score + 640
@@ -145,9 +160,12 @@ def winner():
 winner()
 print("Round number: ", round)
 
-turn = 0
+turn = 1
+opp_turn = 1
 current_hand = []
 opponent_hand = []
+my_score = 0
+opp_score = 0
 roll = "y"
 
 while turn < 2 and my_rounds < 2 and opp_rounds < 2 and roll.lower() == "y":
@@ -159,7 +177,7 @@ while turn < 2 and my_rounds < 2 and opp_rounds < 2 and roll.lower() == "y":
     roll = ""
     print("You rolled: ", current_hand)
 
-if turn < 2 and opp_score <= my_score:
+if opp_turn < 2 and opp_score <= my_score:
     opponent_hand = []
     for i in range(num_dice):
         i = opponent_hand.append(random.randint(min, max))
@@ -180,4 +198,63 @@ opp_score = opp_scoring()
 print(opp_score)
 
 winner()
+
+def game_over():
+    if my_rounds == 2:
+        sys.exit("You win!")
+    elif opp_rounds == 2:
+        sys.exit("You lose!")
+    else:
+        pass
+
+game_over()
 print("Round number: ", round)
+
+turn = 1
+opp_turn = 1
+current_hand = []
+opponent_hand = []
+my_score = 0
+opp_score = 0
+roll = "y"
+
+while turn < 2 and my_rounds < 2 and opp_rounds < 2 and roll.lower() == "y":
+    current_hand = []
+    for i in range(num_dice):
+        i = current_hand.append(random.randint(min, max))
+        current_hand.sort()
+    turn = turn + 1
+    roll = ""
+    print("You rolled: ", current_hand)
+
+if opp_turn < 2 and opp_score <= my_score:
+    opponent_hand = []
+    for i in range(num_dice):
+        i = opponent_hand.append(random.randint(min, max))
+        opponent_hand.sort()
+    print('Your opponent rolled: ', opponent_hand)
+
+z = current_hand
+again(z)
+
+print("You rolled: ", current_hand)
+
+current_hand = Counter(current_hand)
+opponent_hand = Counter(opponent_hand)
+
+my_score = my_scoring()
+print(my_score)
+opp_score = opp_scoring()
+print(opp_score)
+
+winner()
+
+def game_over():
+    if my_rounds == 2:
+        sys.exit("You win!")
+    elif opp_rounds == 2:
+        sys.exit("You lose!")
+    else:
+        sys.exit("It's a tie!")
+
+game_over()
