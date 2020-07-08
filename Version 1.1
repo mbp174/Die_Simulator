@@ -1,34 +1,50 @@
-import pygame
+from collections import Counter
 import random
 
-min = 1
-max = 6
+class Player:
+    def __init__(self, name, current_hand, turn, rd_score, rds_won):
+        self.name = name
+        self.current_hand = current_hand
+        self.turn = turn
+        self.rd_score = rd_score
+        self.rds_won = rds_won
+    def score_the_roll(Player):
+        Player.current_hand = Counter(Player.current_hand)
+        for key in Player.current_hand:
+            if 5 in Player.current_hand.values(): # Five of a Kind
+                Player.rd_score = 5120
+            elif 4 in Player.current_hand.values(): # Four of a Kind
+                Player.rd_score = 2560
+            elif 3 in Player.current_hand.values() and 2 in Player.current_hand.values(): # Full House
+                Player.rd_score = 1280
+            elif 2 in Player.current_hand and 3 in Player.current_hand and 4 in Player.current_hand and 5 in Player.current_hand and 6 in Player.current_hand:
+                Player.rd_score = 650
+            elif 1 in Player.current_hand and 2 in Player.current_hand and 3 in Player.current_hand and 4 in Player.current_hand and 5 in Player.current_hand:
+                Player.rd_score = 640
+            elif 3 in Player.current_hand.values(): # Three of a Kind
+                Player.rd_score = 320
+            elif 2 in Player.current_hand.values(): # Pair or Two Pair
+                for value in Player.current_hand.values():
+                    if value == 2:
+                        Player.rd_score = Player.rd_score + 20
+        return Player.rd_score
+    def tiebreaker(Player):
+        if Player.rd_score == Player.rd_score:
+            for value in Player.current_hand.values():
+                if value > 
+player1 = Player("Player 1", current_hand = [5, 5, 3, 1, 6], turn = 1, rd_score = 0, rds_won = 0)
+player2 = Player("Player 2", current_hand = [1, 2, 2, 2, 6], turn = 1, rd_score = 0, rds_won = 0)
 
-# pygame setup to provide GUI
-pygame.init()
-pygame.quit()
+print(player1.name, ":", "Turn:", player1.turn, "Current Hand:", player1.current_hand, "Round Score:", player1.rd_score, "Rounds Won:", player1.rds_won)
+print(player2.name, ":", "Turn:", player2.turn, "Current Hand:", player2.current_hand, "Round Score:", player2.rd_score, "Rounds Won:", player2.rds_won)
 
-# Tracks score, number of dice, and turn number to determine winner.
-my_score = 0
-opp_score = 0
-num_dice = 5
-turn = 0
-roll = "y"
+def game_over(self):
+    pass
 
-# Tracks rolls for current turn.
-my_roll = []
-opp_roll = []
+Player.score_the_roll(player1)
+Player.score_the_roll(player2)
 
-# Initiates play by returning "yes".
-
-# Rolls the dice for the player and opponent.
-while turn < 2 and roll.lower() == "y":
-	roll = input("Would you like to roll the dice? y/n: ")
-	for i in range(num_dice):
-		i = my_roll.append(random.randint(1, 6))
-		i = opp_roll.append(random.randint(1, 6))
-	turn = turn + 1
-	print("You rolled: ", my_roll)
-	print("Your opponent rolled: ", opp_roll)
-else:
-	print("The winner is ")
+print(player1.current_hand)
+print(player1.rd_score)
+print(player2.current_hand)
+print(player2.rd_score)
